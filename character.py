@@ -111,6 +111,55 @@ class Character:
             
         return result
     
+    def attack(self, target):
+        """Attack a target with the equipped weapon.
+        
+        Args:
+            target: The target to attack (Monster or Character)
+            
+        Returns:
+            str: Result of the attack
+        """
+        # Check if we have a weapon equipped
+        if not self.equipped_weapon:
+            base_damage = 5  # Default unarmed damage
+            attack_text = f"{self.name} attacks with bare hands"
+        else:
+            # Find the equipped weapon in inventory
+            weapon = next((item for item in self.inventory if item.name == self.equipped_weapon and hasattr(item, 'damage')), None)
+            
+            if weapon:
+                base_damage = weapon.damage
+                attack_text = f"{self.name} attacks with {self.equipped_weapon}"
+            else:
+                # Weapon name is set but not found in inventory
+                base_damage = 5  # Default unarmed damage
+                attack_text = f"{self.name} attacks with {self.equipped_weapon}"
+        
+        # Add level bonus
+        damage = base_damage + (self.level - 1) * 2
+        
+        # Apply critical hit chance (10% chance)
+        import random
+        if random.random() < 0.1:  # 10% chance
+            damage = int(damage * 1.5)
+            attack_text += " (Critical Hit!)"
+            
+        # Apply damage based on target type
+        if hasattr(target, 'take_damage'):  # Character object
+            result = target.take_damage(damage)
+            return f"{attack_text} for {damage} damage! {result}"
+        elif hasattr(target, 'health'):  # Monster object
+            target.health -= damage
+            result = f"{attack_text} for {damage} damage!"
+            if target.health <= 0:
+                result += f" {target.monster_type} has been defeated!"
+            else:
+                result += f" {target.monster_type} health: {target.health}"
+            return result
+        else:
+            return f"{attack_text}, but it has no effect!"
+    
     def __str__(self):
         """Return a string representation of the character."""
         weapon_info = f", wielding {self.equipped_weapon}" if self.equipped_weapon else ""

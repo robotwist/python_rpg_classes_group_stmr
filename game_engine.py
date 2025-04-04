@@ -4,6 +4,7 @@ from quest import Quest
 from potion import Potion
 from item import Item
 from monster import Monster
+from battle import Battle
 
 default_quests = [
     {
@@ -114,11 +115,25 @@ def main():
     if 0 <= quest_choice < len(quests):
         selected_quest = quests[quest_choice]
         print(f"You have chosen the quest: {selected_quest.name}")
+        print("")
         print(selected_quest.description)
-        print("Rewards:", selected_quest.rewards)
-        print("Enemies:", selected_quest.enemy)
+        print("")
+        print("Rewards:")
+        print("----------------------")
+        for reward in selected_quest.rewards['items']:
+            print(reward)
+        print("Gold:", selected_quest.rewards['gold'])
+        print("Experience:", selected_quest.rewards['experience'])
+        print("----------------------")
+        print("Enemies:\n", selected_quest.enemy)
+        print("----------------------")
     else:
         print("Invalid choice. No quest selected.")
+        
+    combat = Battle(hero, selected_quest.enemy)
+    combat.start()
+    
+    
     print("Game Over")
     print("Thank you for playing!")
 main()

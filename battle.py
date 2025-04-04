@@ -1,4 +1,5 @@
 import random
+from monster import Attack
 
 dialog = {
     'initiate_battle': [
@@ -31,18 +32,20 @@ class Battle:
         self.player_character = player_character
         self.monster = monster
 
-    def start_battle(self):
+    def start(self):
         init_msg = random.choice(dialog['initiate_battle'])
-        print(init_msg.format(monster=self.monster.name, player=self.player_character.name))
+        self.monster.initiative = 0
+        self.player_character.initiative = 0
+        print(init_msg.format(monster=self.monster.monster_type, player=self.player_character.name))
         
         if self.roll_initiative():
             print(f"{self.player_character.name} seizes the initiative!")
             attacker = 'player'
         else:
-            print(f"{self.monster.name} moves swiftly, claiming the initiative!")
+            print(f"{self.monster.monster_type} moves swiftly, claiming the initiative!")
             attacker = 'monster'
         
-        while self.player_character.is_alive() and self.monster.is_alive():
+        while self.player_character.is_alive() and self.monster.health > 0:
             if attacker == 'player':
                 self.player_attack()
                 attacker = 'monster'
@@ -51,7 +54,7 @@ class Battle:
                 attacker = 'player'
         
         if self.player_character.is_alive():
-            print(f"With a final, resounding blow, you have vanquished the {self.monster.name}!")
+            print(f"With a final, resounding blow, you have vanquished the {self.monster.monster_type}!")
             return True
         else:
             print("Defeat overwhelms you as you collapse to the cold, unyielding stone. Darkness claims your vision...")
@@ -64,13 +67,13 @@ class Battle:
 
     def monster_attack(self):
         msg = random.choice(dialog['monster_attack'])
-        print(msg.format(monster=self.monster.name, player=self.player_character.name))
-        self.monster.attack(self.player_character)
+        print(msg.format(monster=self.monster.monster_type, player=self.player_character.name))
+        self.monster.attack(self.player_character, Attack("Fascism", 15))
 
     def player_attack(self):
         msg = random.choice(dialog['player_attack'])
-        print(msg.format(monster=self.monster.name, player=self.player_character.name))
-        self.player_character.attack(self.monster)
+        print(msg.format(monster=self.monster.monster_type, player=self.player_character.name))
+        self.player_character.attack(self.monster, Attack("Sense of Justice", self.player_character.equipped_weapon.damage))
 
     def __str__(self):
-        return f"Battle between {self.player_character.name} and {self.monster.name}"
+        return f"Battle between {self.player_character.name} and {self.monster.monster_type}"

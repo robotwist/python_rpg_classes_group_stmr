@@ -105,9 +105,6 @@ def main():
     hero.equip_weapon(weapon.name)
     print(f"{hero.name} has equipped a {hero.equipped_weapon}.")
     quests = setupQuests()
-    print("Available Quests:")
-    for quest in quests:
-        print(quest)
     print("Choose a quest by number:")
     for i, quest in enumerate(quests):
         print(f"{i + 1}. {quest.name}")

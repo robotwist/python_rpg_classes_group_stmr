@@ -71,6 +71,27 @@ default_quests = [
     },
 ]
 
+default_weapons = [
+    {
+        "name": "Sword",
+        "description": "A sharp blade",
+        "value": 100,
+        "damage": 25
+    },
+    {
+        "name": "Mace",
+        "description": "A heavy weapon",
+        "value": 150,
+        "damage": 35                
+    },
+    {
+        "name": "Dagger",
+        "description": "A quick and agile weapon",      
+        "value": 80,
+        "damage": 15
+    }
+]
+
 def setupQuests():
     quests = []
     for quest in default_quests:
@@ -91,18 +112,18 @@ def main():
     print("Pick your weapon type (sword, mace, dagger): ")
     weapon_type = input()
     if weapon_type == "sword":
-        character['weapon'] = "Sword"
+        character['weapon'] = default_weapons[0]['name']
     elif weapon_type == "mace":
-        character['weapon'] = "Mace"
+        character['weapon'] = default_weapons[1]['name']
     elif weapon_type == "dagger":
-        character['weapon'] = "Dagger"
+        character['weapon'] = default_weapons[2]['name']
     else:
         print("Invalid weapon type. Defaulting to Sword.")
         character['weapon'] = "Sword"
         
     hero = Character(character['name'], 100)
     weapon = Weapon(character['weapon'], "A mighty weapon", 100, 25)
-    hero.equip_weapon(weapon.name)
+    hero.equip_weapon(weapon)
     print(f"{hero.name} has equipped a {hero.equipped_weapon}.")
     quests = setupQuests()
     print("Choose a quest by number:")

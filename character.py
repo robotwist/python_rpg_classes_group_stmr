@@ -37,7 +37,7 @@ class Character:
         actual_healing = self.health - original_health
         return f"{self.name} heals for {actual_healing}. Health is now {self.health}/{self.max_health}"
     
-    def equip_weapon(self, weapon_name):
+    def equip_weapon(self, weapon):
         """Equip a weapon by name.
         
         Args:
@@ -46,8 +46,8 @@ class Character:
         Returns:
             str: Description of the weapon being equipped
         """
-        self.equipped_weapon = weapon_name
-        return f"{self.name} equips {weapon_name}!"
+        self.equipped_weapon = weapon
+        return f"{self.name} equips {weapon.name}!"
     
     def learn_spell(self, spell):
         """Learn a new spell.
@@ -111,7 +111,7 @@ class Character:
             
         return result
     
-    def attack(self, target):
+    def attack(self, target, attack):
         """Attack a target with the equipped weapon.
         
         Args:

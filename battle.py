@@ -73,7 +73,8 @@ class Battle:
     def player_attack(self):
         msg = random.choice(dialog['player_attack'])
         print(msg.format(monster=self.monster.monster_type, player=self.player_character.name))
-        self.player_character.attack(self.monster, Attack("Sense of Justice", self.player_character.equipped_weapon.damage))
+        print(f"{self.player_character.name} attacks with their {self.player_character.equipped_weapon.name}!")
+        self.player_character.attack(self.monster, Attack("Sense of Justice", f"{self.player_character.equipped_weapon.damage}"))
 
     def __str__(self):
         return f"Battle between {self.player_character.name} and {self.monster.monster_type}"
